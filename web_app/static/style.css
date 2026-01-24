@@ -1,0 +1,278 @@
+:root {
+    --bg-color: #f4f7f9;
+    --card-bg: #ffffff;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+    --bg-main: #f8fafc;
+    --accent: #3b82f6;
+    --vpc-border: #cbd5e1;
+    --subnet-bg: #f1f5f9;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.container {
+    width: 95%;
+    max-width: 1400px;
+    margin: 2rem auto;
+}
+
+.resource-section {
+    margin-bottom: 1.5rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+.collapse-toggle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: color 0.2s;
+    padding: 1.25rem;
+}
+
+.resource-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.toggle-icon {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.collapsible-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease-out;
+    overflow: hidden;
+}
+
+.collapsible-content.show {
+    grid-template-rows: 1fr;
+}
+
+.collapsible-wrapper {
+    min-height: 0;
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+    padding: 1.5rem;
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 1.25rem;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary);
+}
+
+.card-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    padding-left: 0.25rem;
+}
+
+.text-id {
+    font-family: monospace;
+    font-size: 0.75rem;
+    background: #f8fafc;
+    padding: 3px 6px;
+    border-radius: 4px;
+    color: var(--text-muted);
+    word-break: break-all;
+    margin-bottom: 1rem;
+}
+
+.badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 99px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.bg-primary { background: #dbeafe; color: #1e40af; }
+.bg-info { background: #e0f2fe; color: #075985; }
+.bg-success { background: #dcfce7; color: #166534; }
+.bg-danger { background: #9eddda; color: #056052; }
+
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.badge-tech {
+    font-family: monospace;
+    background: #f8fafc;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.25rem;
+    font-size: 0.65rem;
+    padding: 10px 10px;
+    align-items: flex-start;
+    gap: 4px;
+    border: none;
+}
+
+.badge-tech-cpu {
+    background: #f1f5f9; /* Серый фон */
+    color: #475569;
+    border-color: #e2e8f0;
+}
+
+.badge-tech-gpu {
+    background: #eef2ff; /* Фиолетовый фон */
+    color: #4f46e5;
+    border-color: #c7d2fe;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+/* Сетка для VPC (внешние плитки) */
+.vpc-grid {
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    margin-top: 1rem;
+    align-items: start;
+    padding: 0 1.25rem 1.25rem;
+    column-count: 3;
+    column-gap: 1.5rem;
+}
+
+/* Карточка VPC */
+.vpc-card {
+    background: var(--card-bg);
+    border: 1px solid var(--vpc-border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s, border-color 0.2s;
+    height: auto;
+    display: block;
+    break-inside: avoid-column;
+    margin-bottom: 1.25rem;
+}
+
+.vpc-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.vpc-header {
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.vpc-name {
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--text-main);
+}
+
+/* Сетка подсетей (внутренние плитки) */
+.subnet-mini-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.75rem;
+    background: var(--subnet-bg);
+    padding: 0.75rem;
+    border-radius: 10px;
+    align-items: start;
+}
+
+/* Плитка подсети */
+.subnet-tile {
+    background: white;
+    border: 1px solid var(--border-color);
+    padding: 0.75rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.subnet-tile-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.subnet-tile-cidr {
+    font-size: 0.8rem;
+    color: var(--accent);
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+}
+
+/* Вспомогательные элементы */
+.text-id-sm {
+    font-family: monospace;
+    font-size: 0.7rem;
+    background: #f1f5f9;
+    padding: 2px 6px;
+    margin-bottom: 1.25rem;
+    border-radius: 4px;
+    color: var(--text-muted);
+    width: fit-content;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.bg-success { background: #dcfce7; color: #166534; }
+.bg-info { background: #e0f2fe; color: #0369a1; }
+
+/* Анимация сворачивания (для остальных категорий) */
+.collapsible-content {
+    display: none;
+    overflow: hidden;
+}
+
+.collapsible-content.show {
+    display: block;
+}
+
+.toggle-icon {
+    transition: transform 0.3s ease;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}

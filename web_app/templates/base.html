@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud.ru Portal</title>
+    <link href="https://fonts.googleapis.com" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav style="background: #1e293b; padding: 1rem 0; color: white;">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; margin: 0 auto;">
+            <a href="/" style="color: white; text-decoration: none; font-weight: 800; font-size: 1.1rem;">
+                <span style="color: #3b82f6;">●</span> Cloud.ru Admin
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.collapse-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const icon = this.querySelector('.toggle-icon');
+                    
+                    if (content && content.classList.contains('collapsible-content')) {
+                        const isOpened = content.classList.toggle('show');
+                        if (icon) {
+                            icon.style.transform = isOpened ? 'rotate(180deg)' : 'rotate(0deg)';
+                        }
+                    }
+                });
+            });
+        });
+
+    </script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h2 style="font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">Справочник ресурсов</h2>
+    <p style="color: var(--text-muted); margin: 0;">Обзор инфраструктуры облака</p>
+</div>
+
+
+
+
+
+
+{% for category, items in resources.items() %}
+    {# Пропускаем subnets, так как они теперь внутри vpcs #}
+    {% if category != 'subnets' %}
+    <div class="resource-section">
+        <div class="collapse-toggle">
+            <h4 class="resource-title">
+                {{ category | replace('_', ' ') }}
+                <span style="color: var(--text-muted); font-weight: 400; margin-left: 8px;">({{ items|length }})</span>
+            </h4>
+            <span class="toggle-icon">▼</span>
+        </div>
+
+        <div class="collapsible-content">
+            <div class="collapsible-wrapper">
+                
+                {# Специфичный вид для VPC #}
+                {% if category == 'vpcs' %}
+                    <div class="vpc-grid">
+                        {% for vpc in items %}
+                        <div class="vpc-card">
+                            <div class="vpc-header">
+                                <span class="vpc-name">{{ vpc.name or 'Unnamed VPC' }}</span>
+                                <code class="text-id-sm">{{ vpc.id }}</code>
+                            </div>
+                            
+                            <div class="subnet-mini-grid">
+                                {% set vpc_subnets = subnets_by_vpc.get(vpc.id, []) %}
+                                {% for subnet in vpc_subnets %}
+                                <div class="subnet-tile">
+                                    <div class="subnet-tile-name" title="{{ subnet.name }}">{{ subnet.name }}</div>
+                                    <div class="subnet-tile-cidr">{{ subnet.subnet_address or subnet.cidr }}</div>
+                                </div>
+                                {% else %}
+                                <div style="grid-column: 1/-1; font-size: 0.75rem; color: var(--text-muted); text-align: center;">Нет подсетей</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if category == 'topology' %}
+			<div class="card mt-4">
+			    <div class="card-header bg-dark text-white"><span style="color:#dd362e;">[BETA]</span><br>Network Topology: Magic Router Paths</div>
+			    <div class="card-body">
+				<table class="table table-striped">
+				    <thead>
+					<tr>
+					    <th>#</th>
+					    <th>SRC (VPC Name)</th>
+					    <th>NEXT HOP (Magic Router)</th>
+					    <th>DST (Destination CIDR)</th>
+					</tr>
+				    </thead>
+				    <tbody>
+					{% for row in resources.topology %}
+					<tr>
+					    <td>{{ loop.index }}</td>
+					    <td><span class="badge border text-dark">{{ row.src }}</span></td>
+					    <td class="text-center">
+						<strong>{{ row.mr }}</strong> <i class="bi bi-arrow-right text-primary"></i>
+					    </td>
+					    <td>
+						<b class="text-success">{{ row.dst }}</b>
+						{% if row.description %}
+						    <br><small class="text-muted">{{ row.description }}</small>
+						{% endif %}
+						<br><small style="font-size: 0.7rem; color: #ccc;">via {{ row.next_hop }}</small>
+					    </td>
+					</tr>
+					{% endfor %}
+				    </tbody>
+				</table>
+			    </div>
+			</div>
+                {% else %}
+                    <div class="card-container">
+                        {% for item in items %}
+                        <div class="card">
+                            <div class="card-title">{{ item.name or item.displayName or 'Resource' }}</div>
+                            <code class="text-id-sm">{{ item.id }}</code>
+                            
+                            <div style="margin-top: auto;">
+                                {% if category == 'flavors' %}
+                                    <span class="badge bg-success">vCPU: {{ item.cpu }}</span>
+                                    <span class="badge bg-info">RAM: {{ item.ram }} Gb</span>
+                                {% else %}
+                                    <span class="badge" style="background: #f1f5f9; color: #475569;">Resource</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% else %}
+    <div style="text-align: center; padding: 3rem; background: white; border-radius: 12px; border: 1px dashed var(--border-color);">
+        <p style="color: var(--text-muted);">Данные не найдены. Пожалуйста, запустите Discovery</p>
+    </div>
+{% endfor %}
+{% endblock %}
+

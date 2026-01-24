@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="p-5 mb-4 bg-white border rounded-3 text-center">
+    <h2>Добро пожаловать в портал самообслуживания</h2>
+    <p class="lead">Здесь вы можете актуализировать данные облака и создавать новые VM.</p>
+    <hr>
+    {% if data_exists %}
+	<p class="text-success">✅ Данные ресурсов загружены. Можно просматривать.</p>
+	<div style="display: flex; gap: 20px; align-items: center;">
+		<a href="/resources" style="background: #2563eb; color: white; padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; font-size: 0.9rem; font-weight: 600;">Show Cloud.ru Resources</a>
+	</div>
+    {% else %}
+	<p class="text-danger">⚠️ Данные еще не собраны. Нажмите Discovery.</p>
+    {% endif %}
+    	<br>
+	<div style="display: flex; gap: 20px; align-items: center;">
+		<a href="/discover" style="background: #2563eb; color: white; padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; font-size: 0.9rem; font-weight: 600;">Run Discovery</a>
+	</div>
+
+</div>
+{% endblock %}
