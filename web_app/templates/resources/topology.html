@@ -1,0 +1,33 @@
+<div class="card mt-4">
+    <div class="card-header bg-dark text-white"><span style="color:#dd362e;">[BETA]</span><br>Network Topology: Magic Router Paths</div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>SRC (VPC Name)</th>
+                    <th>NEXT HOP (Magic Router)</th>
+                    <th>DST (Destination CIDR)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in items %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td><span class="badge border text-dark">{{ row.src }}</span></td>
+                    <td class="text-center">
+                        <strong>{{ row.mr }}</strong> <i class="bi bi-arrow-right text-primary"></i>
+                    </td>
+                    <td>
+                        <b class="text-success">{{ row.dst }}</b>
+                        {% if row.description %}
+                            <br><small class="text-muted">{{ row.description }}</small>
+                        {% endif %}
+                        <br><small style="font-size: 0.7rem; color: #ccc;">via {{ row.next_hop }}</small>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
