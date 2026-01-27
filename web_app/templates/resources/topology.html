@@ -1,31 +1,67 @@
+<style>
+    /* Базовые стили для подсказок (Tooltip) */
+    .tooltip-container {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+    }
+    .tooltip-text {
+        visibility: hidden;
+        width: 150px;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%; /* Показываем сверху */
+        left: 50%;
+        margin-left: -75px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .tooltip-container:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
 <div class="card mt-4">
     <div class="card-header bg-dark text-white"><span style="color:#dd362e;">[BETA]</span><br>Network Topology: Magic Router Paths</div>
     <div class="card-body">
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>SRC (VPC Name)</th>
+                    <th>SRC (VPC Name [CIDRs])</th>
                     <th>NEXT HOP (Magic Router)</th>
-                    <th>DST (Destination CIDR)</th>
+                    <th>DST (Destination CIDR & Name)</th>
                 </tr>
             </thead>
             <tbody>
-                {% for row in items %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td><span class="badge border text-dark">{{ row.src }}</span></td>
-                    <td class="text-center">
-                        <strong>{{ row.mr }}</strong> <i class="bi bi-arrow-right text-primary"></i>
-                    </td>
-                    <td>
-                        <b class="text-success">{{ row.dst }}</b>
-                        {% if row.description %}
-                            <br><small class="text-muted">{{ row.description }}</small>
-                        {% endif %}
-                        <br><small style="font-size: 0.7rem; color: #ccc;">via {{ row.next_hop }}</small>
-                    </td>
-                </tr>
+                {% for src_vpc_name, routes in items.items() %}
+                    {% for route in routes %}
+                        <tr>
+                            <!-- SRC VPC Name - показываем только для первой строки в группе -->
+                            {% if loop.first %}
+                                <td rowspan="{{ routes|length }}"><span class="badge border text-dark">{{ src_vpc_name }}</span></td>
+                            {% endif %}
+
+                            <!-- NEXT HOP (MR Name) -->
+                            <td class="text-center">
+                                <strong>{{ route.mr }}</strong> <i class="bi bi-arrow-right text-primary"></i>
+                            </td>
+
+                            <!-- DST CIDR & Name с подсказкой -->
+                            <td>
+                                <b class="text-success">{{ route.dst }}</b>
+                                <div class="tooltip-container">
+                                    <i class="bi bi-question-circle text-muted"></i>
+                                    <span class="tooltip-text">{{ route.description }}</span>
+                                </div>
+                                <br><small style="font-size: 0.7rem; color: #ccc;">via {{ route.next_hop }}</small>
+                            </td>
+                        </tr>
+                    {% endfor %}
                 {% endfor %}
             </tbody>
         </table>

@@ -13,8 +13,8 @@ class MagicRouterCollector:
         params = {"project_id": self.client.project_id}
         data = self.client.perform_request("GET", endpoint, params)
 
-        table_rows = []
-        name_only_map = {k: v.split(' [')[0] for k,v in vpc_map.items()}
+        # Используем словарь для группировки вместо списка table_rows
+        grouped_routes = {} 
 
         if data and 'magicRouters' in data:
             for mr_item in data['magicRouters']:
@@ -28,49 +28,46 @@ class MagicRouterCollector:
                     vpc_id = conn.get('vpcId') or conn.get('vpc_id')
                     src_info = vpc_map.get(vpc_id, f"ID: {vpc_id}")
 
+                    # Если ключа (VPC Name) еще нет в словаре, создаем пустой список
+                    if src_info not in grouped_routes:
+                        grouped_routes[src_info] = []
+
                     for route in routes:
                       dst = route.get('subnet') or "0.0.0.0/0"
                       n_hop = route.get('nextHopVpcId') or route.get('nextHopType')
-                      n_hop_name = name_only_map.get(n_hop, n_hop)
                       descr = route.get('description', '')
 
-                      table_rows.append({
+                      # Добавляем маршрут к соответствующему SRC в словаре
+                      grouped_routes[src_info].append({
                           "src": src_info,
                           "mr": mr_name,
                           "dst": dst,
-                          "next_hop": n_hop_name,
+                          "next_hop": n_hop, 
                           "description": descr
                       })
-        return table_rows
+        return grouped_routes # Возвращаем сгруппированный словарь
 
     def get_by_id(self, magic_router_id):
+        # ... (методы get_by_id и get_vpc_connections остаются без изменений)
         logging.info(f"Begin discovery {RESOURCE} [id] for project: {self.client.project_id}")
-
         endpoint = Config.API_MAGIC_ROUTER + Config.ENDPOINTS["magic_routers"] + "/" + magic_router_id + "/routes/static"
         params = {"project_id": self.client.project_id}
         data = self.client.perform_request("GET", endpoint, params)
-
         if data and 'routes' in data:
             resources = data['routes']
             logging.info(f"Success {RESOURCE} discovered: {len(resources)}")
             return resources
-
         logging.warning(f"{RESOURCE} discovery list is empty or error occured")
         return []
 
-
     def get_vpc_connections(self, magic_router_id):
         logging.info(f"Begin discovery {RESOURCE} [vpc connections] for project: {self.client.project_id}")
-
         endpoint = Config.API_MAGIC_ROUTER + Config.ENDPOINTS["magic_routers"] + "/" + magic_router_id + "/connections/vpc"
         params = {"project_id": self.client.project_id}
         data = self.client.perform_request("GET", endpoint, params)
-
         if data and 'vpcConnections' in data:
             resources = data['vpcConnections']
             logging.info(f"Success {RESOURCE} discovered: {len(resources)}")
             return resources
-
         logging.warning(f"{RESOURCE} discovery list is empty or error occured")
         return []
-
