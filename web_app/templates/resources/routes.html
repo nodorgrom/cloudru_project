@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="header-section">
+        <h1>Cloud Routes</h1>
+        <p class="subtitle">Статические маршруты, сгруппированные по VPC (через Magic Routers)</p>
+    </div>
+
+    <div class="vpc-grid">
+        {% for vpc_name, routes in items.items() %}
+        <div class="vpc-card">
+            <div class="vpc-header">
+                <span class="vpc-name">{{ vpc_name }}</span>
+                <span class="badge">{{ routes|length }} routes</span>
+            </div>
+            
+            <div class="routes-list">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); text-align: left;">
+                            <th style="padding: 4px;">DST Subnet</th>
+                            <th style="padding: 4px;">Next Hop</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for route in routes %}
+                        <tr style="border-bottom: 1px dotted #eee;">
+                            <td style="padding: 6px 4px;">
+                                <code class="text-id-sm" style="background: #f0f0f0; padding: 2px 4px; border-radius: 4px;">
+                                    {{ route.dst }}
+                                </code>
+                            </td>
+                            <td style="padding: 6px 4px; color: var(--text-main);">
+                                {{ route.next_hop }}
+                                {% if route.description %}
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">{{ route.description }}</div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            {% if routes %}
+            <div class="vpc-footer" style="margin-top: 10px; font-size: 0.7rem; color: var(--text-muted); text-align: right;">
+                via {{ routes[0].mr_name }}
+            </div>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="no-data">Маршруты не найдены.</div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    /* Дополнительные стили для таблицы внутри карточки */
+    .routes-list {
+        margin-top: 10px;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    .badge {
+        background: var(--primary-color, #007bff);
+        color: white;
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-size: 0.7rem;
+    }
+</style>
+{% endblock %}
