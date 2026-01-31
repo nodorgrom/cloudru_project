@@ -4,6 +4,7 @@ from discovery.collectors.subnets import SubnetCollector
 from discovery.collectors.security_groups import SecurityGroupsCollector
 from discovery.collectors.flavors import FlavorsCollector
 from discovery.collectors.magic_routers import MagicRouterCollector
+from discovery.collectors.routes import RouteCollector
 from discovery.config import Config
 import json
 
@@ -28,6 +29,7 @@ def run_discovery():
     topology = MagicRouterCollector(client).get(vpc_map)
     security_groups = SecurityGroupsCollector(client).get()
     flavors = FlavorsCollector(client).get()
+    routes = RouteCollector(client).get()
 
 
     discovered_resources = {
@@ -35,7 +37,8 @@ def run_discovery():
         "subnets": subnets,
         "security_groups": security_groups,
         "flavors": flavors,
-        "topology": topology
+        "topology": topology,
+        "routes": routes
     }
 
 
