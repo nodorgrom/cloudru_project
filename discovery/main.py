@@ -31,6 +31,7 @@ def run_discovery():
     flavors = FlavorsCollector(client).get()
     routes = RouteCollector(client).get()
 
+    print(routes)
 
     discovered_resources = {
         "vpcs": vpcs,
