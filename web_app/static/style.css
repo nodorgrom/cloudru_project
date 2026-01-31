@@ -36,6 +36,12 @@ body {
     border: 1px solid var(--border-color);
 }
 
+.resource-count {
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-left: 8px;
+}
+
 .collapse-toggle {
     cursor: pointer;
     display: flex;

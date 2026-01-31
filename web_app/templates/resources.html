@@ -6,38 +6,28 @@
 </div>
 
 {% for category, items in resources.items() %}
-    {# Пропускаем subnets, так как они теперь внутри vpcs #}
-    {% if category != 'subnets' %}
     <div class="resource-section">
         <div class="collapse-toggle">
             <h4 class="resource-title">
                 {{ category | replace('_', ' ') }}
-                <span style="color: var(--text-muted); font-weight: 400; margin-left: 8px;">({{ items|length }})</span>
+                <span class="resource-count">({{ items|length }})</span>
             </h4>
             <span class="toggle-icon">▼</span>
         </div>
 
         <div class="collapsible-content">
             <div class="collapsible-wrapper">
-                
-                {# Используем компоненты через include #}
-                {% if category == 'vpcs' %}
-                    {% include 'resources/vpcs.html' %}
-                {% elif category == 'topology' %}
-                    {% include 'resources/topology.html' %}
-                {% elif category == 'routes' %}
-                    {% include 'resources/routes.html' %}
-                {% else %}
-                    {% include 'resources/generic_list.html' %}
-                {% endif %}
-
+            {% if category == "vpcs" %}
+                {% include 'resources/vpcs.html' %}
+            {% elif category == "security_groups" %}
+                {% include 'resources/security_groups.html' %}
+            {% elif category == "flavors" %}
+                {% include 'resources/flavors.html' %}
+            {% elif category == "subnets" %}
+                {% include 'resources/subnets.html' %}
+            {% endif %}
             </div>
         </div>
-    </div>
-    {% endif %}
-{% else %}
-    <div style="text-align: center; padding: 3rem; background: white; border-radius: 12px; border: 1px dashed var(--border-color);">
-        <p style="color: var(--text-muted);">Данные не найдены. Пожалуйста, запустите Discovery</p>
     </div>
 {% endfor %}
 {% endblock %}

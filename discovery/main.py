@@ -1,10 +1,8 @@
 from discovery.base import CloudEvoClient
 from discovery.collectors.vpcs import VPCCollector
-from discovery.collectors.subnets import SubnetCollector
+from discovery.collectors.subnet import SubnetCollector
 from discovery.collectors.security_groups import SecurityGroupsCollector
 from discovery.collectors.flavors import FlavorsCollector
-from discovery.collectors.magic_routers import MagicRouterCollector
-from discovery.collectors.routes import RouteCollector
 from discovery.config import Config
 import json
 
@@ -14,31 +12,14 @@ def run_discovery():
 
     vpcs = VPCCollector(client).get()
     subnets = SubnetCollector(client).get()
-
-    vpc_map = {}
-
-    for v in vpcs:
-      v_id = v['id']
-      v_name = v['name']
-      v_cidrs = [s['subnet_address'] for s in subnets if s.get('vpc_id')]
-      cidr_str = ", ".join(v_cidrs) if v_cidrs else "no-cidr"
-
-      vpc_map[v_id] = f"{v_name} [{cidr_str}]"
-
-
-    topology = MagicRouterCollector(client).get(vpc_map)
     security_groups = SecurityGroupsCollector(client).get()
     flavors = FlavorsCollector(client).get()
-    routes = RouteCollector(client).get()
-
 
     discovered_resources = {
         "vpcs": vpcs,
-        "subnets": subnets,
         "security_groups": security_groups,
         "flavors": flavors,
-        "topology": topology,
-        "routes": routes
+        "subnets": subnets
     }
 
 
