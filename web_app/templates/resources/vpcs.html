@@ -1,12 +1,9 @@
-<div class="vpc-grid">
+<div class="resource-grid">
     {% for vpc in items %}
-    <div class="vpc-card">
-        <div class="vpc-header">
-            <span class="vpc-name">{{ vpc.name or 'Unnamed VPC' }}</span>
+    <div class="resource-card">
+        <div class="resource-header">
+            <span class="resource-name">{{ vpc.name or 'Unnamed VPC' }}</span>
             <code class="text-id-sm">{{ vpc.id }}</code>
-        </div>
-        
-
         </div>
     </div>
     {% endfor %}

@@ -163,8 +163,7 @@ body {
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-/* Сетка для VPC (внешние плитки) */
-.vpc-grid {
+.resource-grid {
     grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
     margin-top: 1rem;
     align-items: start;
@@ -173,8 +172,7 @@ body {
     column-gap: 1.5rem;
 }
 
-/* Карточка VPC */
-.vpc-card {
+.resource-card {
     background: var(--card-bg);
     border: 1px solid var(--vpc-border);
     border-radius: 12px;
@@ -187,19 +185,19 @@ body {
     margin-bottom: 1.25rem;
 }
 
-.vpc-card:hover {
+.resource-card:hover {
     border-color: var(--accent);
     transform: translateY(-2px);
 }
 
-.vpc-header {
+.resource-header {
     margin-bottom: 1.25rem;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
 }
 
-.vpc-name {
+.resource-name {
     font-weight: 800;
     font-size: 1.1rem;
     color: var(--text-main);

@@ -1,6 +1,6 @@
 from discovery.base import CloudEvoClient
 from discovery.collectors.vpcs import VPCCollector
-from discovery.collectors.subnet import SubnetCollector
+from discovery.collectors.subnets import SubnetCollector
 from discovery.collectors.security_groups import SecurityGroupsCollector
 from discovery.collectors.flavors import FlavorsCollector
 from discovery.config import Config
