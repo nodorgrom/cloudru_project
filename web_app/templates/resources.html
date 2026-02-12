@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-<div style="margin-bottom: 2rem;">
-    <h2 style="font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">Справочник ресурсов</h2>
-    <p style="color: var(--text-muted); margin: 0;">Обзор инфраструктуры облака</p>
+<div class="resource-header-wrapper">
+    <h2 class="resource-header-main">Справочник ресурсов</h2>
+    <p class="resource-header-description">Обзор инфраструктуры облака</p>
 </div>
 
 {% for category, items in resources.items() %}
@@ -17,7 +17,7 @@
 
         <div class="collapsible-content">
             <div class="collapsible-wrapper">
-            {% if category == "vpcs" %}
+            {% if category == "vpcs" or category == "subnets" %}
                 {% include 'resources/vpcs.html' %}
             {% elif category == "security_groups" %}
                 {% include 'resources/security_groups.html' %}
