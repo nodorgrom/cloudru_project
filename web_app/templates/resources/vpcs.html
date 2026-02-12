@@ -5,8 +5,16 @@
             <span class="resource-name">{{ vpc.name or 'Unnamed VPC' }}</span>
             <code class="text-id-sm">{{ vpc.id }}</code>
         </div>
+
+        {% for subnet in vpc_subnets %}
+        <div class="subnet-mini-grid">
+            <div class="subnet-tile">
+                <div class="subnet-tile-name" title="{{ subnet.name }}">{{ subnet.name }}</div>
+                <div class="subnet-tile-cidr">{{ subnet.subnet_address }} ({{ subnet.interface_count }})</div>
+            </div>
+        </div>
+        {% endfor %}
+
     </div>
     {% endfor %}
-
-    <div>{{ vpc_subnets }}</div>
 </div>
