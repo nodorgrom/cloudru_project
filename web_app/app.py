@@ -57,17 +57,19 @@ def discover():
 @app.route('/resources')
 def resources():
     data = load_resources()
-    subnets_by_vpc = {}
-    # all_subnets = data.get('subnets', [])
 
-    # for sn in all_subnets:
-    #     v_id = sn.get('vpc_id')
-    #     if v_id:
-    #         if v_id not in subnets_by_vpc:
-    #             subnets_by_vpc[v_id] = []
-    #         subnets_by_vpc[v_id].append(sn)
-    # return render_template('resources.html', resources=data, subnets_by_vpc=subnets_by_vpc)
-    return render_template('resources.html', resources=data)
+    vpc_subnets = {}
+    all_subnets = data.get('subnets', [])
+
+    for subnet in all_subnets:
+        vpc_id = subnet.get('vpc_id')
+
+        if vpc_id:
+            if vpc_id not in vpc_subnets:
+                vpc_subnets[vpc_id] = []
+            vpc_subnets[vpc_id].append(subnet)
+
+    return render_template('resources.html', resources=data, vpc_subnets=vpc_subnets)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
