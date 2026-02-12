@@ -10,11 +10,30 @@ import json
 def run_discovery():
     client = CloudEvoClient()
 
+
+    ### SECURITY GROUPS DATA
+    # security_groups = SecurityGroupsCollector(client).get()
+    sg_collector = SecurityGroupsCollector(client)
+    security_groups = sg_collector.get()
+    rules_map = asyncio.run(sg_collector.get_sg_rules(security_groups))
+
+    for sg in security_groups:
+    sg['rules'] = rules_map.get(sg['id'], [])
+
+
+    ### VPCs DATA
     vpcs = VPCCollector(client).get()
+
+
+    ### SUBNETS DATA
     subnets = SubnetCollector(client).get()
-    security_groups = SecurityGroupsCollector(client).get()
+
+
+    ### FLAVORS DATA
     flavors = FlavorsCollector(client).get()
 
+
+    ### FULL DATA
     discovered_resources = {
         "vpcs": vpcs,
         "security_groups": security_groups,

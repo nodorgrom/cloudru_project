@@ -1,6 +1,8 @@
 import requests
 import logging
 import json
+import httpx
+import asyncio
 from discovery.config import Config
 
 class CloudEvoClient:
@@ -55,3 +57,14 @@ class CloudEvoClient:
             logging.error(f"API Error on {url}: {e}")
             raise
 
+
+    async def perform_async_request(self, method, url, params=None):
+        async with httpx.AsyncClient(headers=self.headers, timeout=Config.GET_TIMEOUT) as client:
+            try:
+                resp = await client.request(method, url, params=params)
+                if resp.status_code == 200:
+                    return resp.json()
+                return None
+            except Exception as e:
+                logging.error(f"Async API Error on {url}: {e}")
+                return None
