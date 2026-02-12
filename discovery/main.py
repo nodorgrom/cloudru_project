@@ -5,6 +5,8 @@ from discovery.collectors.security_groups import SecurityGroupsCollector
 from discovery.collectors.flavors import FlavorsCollector
 from discovery.config import Config
 import json
+import asyncio
+import httpx
 
 
 def run_discovery():
@@ -18,7 +20,7 @@ def run_discovery():
     rules_map = asyncio.run(sg_collector.get_sg_rules(security_groups))
 
     for sg in security_groups:
-    sg['rules'] = rules_map.get(sg['id'], [])
+        sg['rules'] = rules_map.get(sg['id'], [])
 
 
     ### VPCs DATA

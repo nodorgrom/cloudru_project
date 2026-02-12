@@ -1,5 +1,6 @@
 from discovery.config import Config
 import logging
+import asyncio
 
 RESOURCE = "SecurityGroups"
 
@@ -29,7 +30,7 @@ class SecurityGroupsCollector:
         for sg in security_groups:
             sg_id = sg['id']
             # Формируем URL согласно документации
-            url = f"{Config.API_COMPUTE}/security-groups/{sg_id}/rules"
+            url = f"{Config.API_COMPUTE}{Config.ENDPOINTS['security_groups']}/{sg_id}/rules"
             tasks.append(self._fetch_rules(sg_id, url))
 
         # Запускаем все запросы параллельно
