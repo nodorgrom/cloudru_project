@@ -27,12 +27,32 @@ def from_json_filter(value):
         return value
 
 
+
+
+
+###### CUSTOM
 def load_resources():
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, 'r', encoding='utf-8') as f:
             return json.load(f)
     return {}
 
+
+def get_vpcs_subnets(data):
+    vpc_subnets = {}
+    all_subnets = data.get('subnets', [])
+
+    for subnet in all_subnets:
+        vpc_id = subnet.get('vpc_id')
+
+        if vpc_id:
+            if vpc_id not in vpc_subnets:
+                vpc_subnets[vpc_id] = []
+            vpc_subnets[vpc_id].append(subnet)
+    return vpc_subnets
+
+
+###### ROUTES
 
 @app.route('/')
 def index():
@@ -57,17 +77,8 @@ def discover():
 @app.route('/resources')
 def resources():
     data = load_resources()
+    vpc_subnets = get_vpcs_subnets(data)
 
-    vpc_subnets = {}
-    all_subnets = data.get('subnets', [])
-
-    for subnet in all_subnets:
-        vpc_id = subnet.get('vpc_id')
-
-        if vpc_id:
-            if vpc_id not in vpc_subnets:
-                vpc_subnets[vpc_id] = []
-            vpc_subnets[vpc_id].append(subnet)
 
     return render_template('resources.html', resources=data, vpc_subnets=vpc_subnets)
 
