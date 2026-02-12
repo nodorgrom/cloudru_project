@@ -6,24 +6,17 @@
             <code class="text-id-sm">{{ vpc.id }}</code>
         </div>
 
-        <div>{{ vpc_subnets }}</div>
-        <br>
-
-        {% for subnet in vpc_subnets %}
-        <h3>SUBNET:</h3>
-        <div>{{ subnet }}</div>
-        <br>
-
         <div class="subnet-mini-grid">
+            {% set subnets = vpc_subnets.get(vpc.id, []) %}
+            {% for subnet in subnets %}
             <div class="subnet-tile">
                 <div class="subnet-tile-name" title="{{ subnet.name }}">{{ subnet.name }}</div>
-                <div class="subnet-tile-cidr">{{ subnet.subnet_address }} ({{ subnet.interface_count }})</div>
+                <div class="subnet-tile-cidr">{{ subnet.subnet_address }}</div>
             </div>
+            {% else %}
+            <div class="no-subnets">Нет подсетей</div>
+            {% endfor %}
         </div>
-        {% else %}
-        <div class="no-subnets">Нет подсетей</div>
-        {% endfor %}
-
     </div>
     {% endfor %}
 </div>
