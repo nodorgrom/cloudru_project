@@ -53,15 +53,15 @@ def get_vpcs_subnets(data):
 
 def get_sg_rules(data):
     sg_rules = {}
-    all_rules = data.get('rules', [])
+    all_groups = data.get('security_groups', [])
 
-    for rule in all_rules:
-        sg_id = rule.get('id')
+    for sg in all_groups:
+        sg_id = sg.get('id')
+        rules = sg.get('rules', [])
 
         if sg_id:
-            if sg_id not in sg_rules:
-                sg_rules[sg_id] = []
-            sg_rules[sg_id].append(rule)
+            sg_rules[sg_id] = rules
+
     return sg_rules
 
 ###### ROUTES
@@ -93,6 +93,10 @@ def resources():
     sg_rules = get_sg_rules(data)
 
 
+    print(1234)
+    print(sg_rules)
+    print(7890)
+    flash(f"{sg_rules}", "success")
     return render_template('resources.html', resources=data, vpc_subnets=vpc_subnets, sg_rules=sg_rules)
 
 if __name__ == '__main__':

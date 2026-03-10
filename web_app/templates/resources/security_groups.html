@@ -1,23 +1,47 @@
 <div class="card-container">
     {% for sg in items %}
-    <div class="resource-card">
-        <div class="resource-header">
-            <span class="resource-name">{{ sg.name or 'Unnamed Security Group' }}</span>
-            <code class="text-id-sm">{{ sg.id }}</code>
-        </div>
+	<div class="resource-card">
+	    <details>
+		<summary class="resource-header">
+		    <!-- Весь заголовок теперь кликабелен -->
+		    <span class="resource-name">{{ sg.name or 'Unnamed Security Group' }}</span>
+		    <code class="text-id-sm">{{ sg.id }}</code>
+		    <span class="expand-icon">▼</span>
+		</summary>
 
-        <div class="subnet-mini-grid">
-            {% set rules = sg_rules.get(sg.id, []) %}
-            {% for rule in rules %}
-            <div class="subnet-tile">
-                <div class="subnet-tile-name" title="{{ rule.description }}">{{ rule.description }}</div>
-                <div class="subnet-tile-cidr">{{ rule.direction }}</div>
-            </div>
-            {% else %}
-            <div class="no-subnets">Нет правил</div>
-            {% endfor %}
-        </div>
-    </div>
+		<div class="rules-table-container">
+		    {% set rules = sg_rules.get(sg.id, []) | sort(attribute='direction', reverse=True) %}
+		    {% if rules %}
+		    <table class="rules-table">
+			<thead>
+			    <tr>
+				<th>#</th>
+				<th>Direction</th>
+				<th>Protocol</th>
+				<th>Ports</th>
+				<th>Remote IP</th>
+				<th>Description</th>
+			    </tr>
+			</thead>
+			<tbody>
+			    {% for rule in rules %}
+			    <tr>
+				<td>{{ loop.index }}</td>
+				<td><span class="badge-{{ rule.direction }}">{{ rule.direction }}</span></td>
+				<td>{{ rule.ip_protocol }}</td>
+				<td>{{ rule.port_range }}</td>
+				<td>{{ rule.remote_ip_prefix or rule.remote_security_group.name or 'any' }}</td>
+				<td class="cell-desc">{{ rule.description or '-' }}</td>
+			    </tr>
+			    {% endfor %}
+			</tbody>
+		    </table>
+		    {% else %}
+		    <div class="no-rules">Правила не настроены</div>
+		    {% endif %}
+		</div>
+	    </details>
+	</div>
     {% endfor %}
     </div>
 </div>

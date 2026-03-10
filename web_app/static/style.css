@@ -48,7 +48,7 @@ body {
     align-items: center;
     justify-content: space-between;
     transition: color 0.2s;
-    padding: 1.25rem;
+    padding: 0.75rem;
 }
 
 .resource-title {
@@ -81,10 +81,11 @@ body {
 }
 
 .card-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.25rem;
-    padding: 1.5rem;
+    /*display: grid;*/
+    display: flow;
+    /*grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));*/
+    /*gap: 1.25rem;*/
+    padding: 0 1.5rem 1.5rem;
 }
 
 .card {
@@ -176,28 +177,31 @@ body {
     background: var(--card-bg);
     border: 1px solid var(--vpc-border);
     border-radius: 12px;
-    padding: 1.25rem;
+    /*padding: 1.25rem;*/
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s, border-color 0.2s;
     height: auto;
     display: block;
     break-inside: avoid-column;
-    margin-bottom: 1.25rem;
+    margin-bottom: 10px;
+    /*margin-bottom: 1.25rem;*/
 }
 
 .resource-card:hover {
     border-color: var(--accent);
     transform: translateY(-1px);
+    margin-top: 1px;
 }
 
 .resource-header {
-    margin-bottom: 1.25rem;
+    padding: 10px;
+    align-items: center;
     display: flex;
-    flex-direction: column;
     gap: 0.25rem;
 }
 
 .resource-name {
+    margin-right: auto;
     font-weight: 800;
     font-size: 1.1rem;
     color: var(--text-main);
@@ -271,7 +275,7 @@ body {
     font-size: 0.7rem;
     background: #f1f5f9;
     padding: 2px 6px;
-    margin-bottom: 1.25rem;
+    /*margin-bottom: 1.25rem;*/
     border-radius: 4px;
     color: var(--text-muted);
     width: fit-content;
@@ -303,3 +307,69 @@ body {
     font-size: 0.8rem;
     color: var(--text-muted);
 }
+
+
+/* temp SG styles */
+.rules-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin-top: 10px;
+}
+
+.rules-table th, .rules-table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.rules-table th {
+    background-color: #f8f9fa;
+    color: #666;
+    font-weight: 600;
+}
+
+.badge-ingress { color: #28a745; font-weight: bold; }
+.badge-egress { color: #007bff; font-weight: bold; }
+
+.cell-desc {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* additional SG styles */
+/* Убираем стандартный маркер details */
+summary::-webkit-details-marker {
+    display: none;
+}
+summary {
+    list-style: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.expand-icon {
+    font-size: 10px;
+    color: #888;
+    transition: transform 0.2s ease;
+}
+
+/* Поворачиваем иконку при раскрытии */
+details[open] .expand-icon {
+    transform: rotate(180deg);
+}
+
+.resource-card {
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.rules-table-container {
+    padding: 10px;
+    background: #fff;
+}
+
+
