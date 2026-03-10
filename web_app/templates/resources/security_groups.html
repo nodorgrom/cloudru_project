@@ -1,4 +1,23 @@
 <div class="card-container">
-    <div class="card">
+    {% for sg in items %}
+    <div class="resource-card">
+        <div class="resource-header">
+            <span class="resource-name">{{ sg.name or 'Unnamed Security Group' }}</span>
+            <code class="text-id-sm">{{ sg.id }}</code>
+        </div>
+
+        <div class="subnet-mini-grid">
+            {% set rules = sg_rules.get(sg.id, []) %}
+            {% for rule in rules %}
+            <div class="subnet-tile">
+                <div class="subnet-tile-name" title="{{ rule.description }}">{{ rule.description }}</div>
+                <div class="subnet-tile-cidr">{{ rule.direction }}</div>
+            </div>
+            {% else %}
+            <div class="no-subnets">Нет правил</div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
     </div>
 </div>

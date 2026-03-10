@@ -51,6 +51,18 @@ def get_vpcs_subnets(data):
             vpc_subnets[vpc_id].append(subnet)
     return vpc_subnets
 
+def get_sg_rules(data):
+    sg_rules = {}
+    all_rules = data.get('rules', [])
+
+    for rule in all_rules:
+        sg_id = rule.get('id')
+
+        if sg_id:
+            if sg_id not in sg_rules:
+                sg_rules[sg_id] = []
+            sg_rules[sg_id].append(rule)
+    return sg_rules
 
 ###### ROUTES
 
@@ -78,9 +90,10 @@ def discover():
 def resources():
     data = load_resources()
     vpc_subnets = get_vpcs_subnets(data)
+    sg_rules = get_sg_rules(data)
 
 
-    return render_template('resources.html', resources=data, vpc_subnets=vpc_subnets)
+    return render_template('resources.html', resources=data, vpc_subnets=vpc_subnets, sg_rules=sg_rules)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
