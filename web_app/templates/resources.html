@@ -6,8 +6,6 @@
 </div>
 
 {% for category, items in resources.items() %}
-    {# Пропускаем subnets, так как они теперь внутри vpcs #}
-    {% if category != 'subnets' %}
     <div class="resource-section">
         <div class="collapse-toggle">
             <h4 class="resource-title">
@@ -19,23 +17,17 @@
 
         <div class="collapsible-content">
             <div class="collapsible-wrapper">
-                
-                {# Используем компоненты через include #}
-                {% if category == 'vpcs' %}
-                    {% include 'resources/vpcs.html' %}
-                {% elif category == 'topology' %}
-                    {% include 'resources/topology.html' %}
-                {% else %}
-                    {% include 'resources/generic_list.html' %}
-                {% endif %}
-
+            {% if category == "vpcs" %}
+	        {% include 'resources/vpcs.html' %}
+            {% elif category == "subnets" %}
+	        {% include 'resources/subnets.html' %}
+            {% elif category == "security_groups" %}
+	        {% include 'resources/security_groups.html' %}
+            {% elif category == "flavors" %}
+                {% include 'resources/flavors.html' %}
+            {% endif %}
             </div>
         </div>
-    </div>
-    {% endif %}
-{% else %}
-    <div style="text-align: center; padding: 3rem; background: white; border-radius: 12px; border: 1px dashed var(--border-color);">
-        <p style="color: var(--text-muted);">Данные не найдены. Пожалуйста, запустите Discovery</p>
     </div>
 {% endfor %}
 {% endblock %}
